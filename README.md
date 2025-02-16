@@ -47,3 +47,5 @@ Before running this project, ensure you have the following installed:
 
 ### **2️⃣ Clone the Repository**
 ```bash
+git clone https://github.com/Manufg07/Simplyfiii.git
+
