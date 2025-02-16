@@ -1,0 +1,45 @@
+{
+  "name": "fabric-network",
+  "version": "1.0.0",
+  "client": {
+    "organization": "Org2",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        }
+      }
+    }
+  },
+  "organizations": {
+    "Org2": {
+      "mspid": "Org2MSP",
+      "peers": ["peer0.org2.simplyfi.com"],
+      "certificateAuthorities": ["ca.org2.simplyfi.com"]
+    }
+  },
+  "peers": {
+    "peer0.org2.simplyfi.com": {
+      "url": "grpcs://localhost:8051",
+      "tlsCACerts": {
+        "path": "../../../SimplyFi/organizations/peerOrganizations/org2.simplyfi.com/peers/peer0.org2.simplyfi.com/tls/ca.crt"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.org2.simplyfi.com",
+        "hostnameOverride": "peer0.org2.simplyfi.com"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca.org2.simplyfi.com": {
+      "url": "https://localhost:8054",
+      "caName": "ca-org2",
+      "tlsCACerts": {
+        "path": "..././../SimplyFi/organizations/peerOrganizations/org2.simplyfi.com/ca/ca.org2.simplyfi.com-cert.pem"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}
