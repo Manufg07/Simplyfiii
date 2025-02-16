@@ -60,19 +60,22 @@ Before running this project, ensure you have the following installed:
 ```bash
 git clone https://github.com/Manufg07/Simplyfiii.git
 cd Simplyfiii
+```
+---
 
 ### **3️⃣ Set Up Hyperledger Fabric Network**
 ```bash
 cd SimplyFi
 ./startSimplyfiNetwork1.sh
 ```
+
 ### **4️⃣ Configure Client**
 ```bash
 cd ../server
 npm install
 cd ../routes
 node setupWallet.js
-`
+```
 ### **5️⃣ Start the REST API Server**
 ```bash
 cd server
@@ -90,15 +93,17 @@ node npm run dev
 
 ### **🛑 Network Issues**
 ```bash
+```
 # Check running Docker containers
 docker ps -a
-
+```
 # Restart the Hyperledger Fabric network
 ./stopSimplyfiNetwork.sh && ./startSimplyfiNetwork1.sh
 ```
 
 ### **🔑 Identity Issues**
 ```bash
+```
 # Reimport user identities
 cd server
 cd routes
