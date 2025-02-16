@@ -35,7 +35,7 @@
       "url": "https://localhost:8054",
       "caName": "ca-org2",
       "tlsCACerts": {
-        "path": "..././../SimplyFi/organizations/peerOrganizations/org2.simplyfi.com/ca/ca.org2.simplyfi.com-cert.pem"
+        "path": "../SimplyFi/organizations/peerOrganizations/org2.simplyfi.com/ca/ca.org2.simplyfi.com-cert.pem"
       },
       "httpOptions": {
         "verify": false
