@@ -37,14 +37,6 @@ The **Wallet API** is used for **identity and credential management**. It enable
 
 ---
 
-## ⚡ Tech Stack
-- **Backend:** Node.js + Express
-- **Blockchain:** Hyperledger Fabric (Fabric v2.x)
-- **Smart Contract:** Chaincode (Fabric Contract API)
-- **Wallet & Identity Management:** Fabric CA (Certificate Authority)
-
----
-
 ## 🛠️ Setup Instructions
 
 ### **1️⃣ Prerequisites**
