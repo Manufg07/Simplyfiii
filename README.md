@@ -86,13 +86,11 @@ node npm run dev
 
 ### **🛑 Network Issues**
 ```bash
-```
+
 # Check running Docker containers
-```bash
 docker ps -a
-```
+
 # Restart the Hyperledger Fabric network
-```bash
 ./stopSimplyfiNetwork.sh && ./startSimplyfiNetwork1.sh
 ```
 
