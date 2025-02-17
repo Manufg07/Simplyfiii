@@ -3,13 +3,15 @@ import { toast } from "react-toastify";
 
 const ReadAssetPage = () => {
   const [assetID, setAssetID] = useState("");
+  const [userId, setUserId] = useState(""); // Add user ID state
   const [assetData, setAssetData] = useState(null);
 
   const submitForm = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`/api/assets/${assetID}`, {
+      const res = await fetch(`/api/assets/${assetID}?userId=${userId}`, {
+        // Pass userId
         method: "GET",
       });
 
@@ -33,6 +35,19 @@ const ReadAssetPage = () => {
           Read Asset User using AssetID
         </h2>
         <form onSubmit={submitForm}>
+          {/* Add User ID Field */}
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2">
+              Your User ID
+            </label>
+            <input
+              type="text"
+              className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              required
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold mb-2">
               Asset ID

@@ -45,15 +45,41 @@ router.get("/assets", async (req, res) => {
   }
 });
 
+// router.get("/assets/:id", async (req, res) => {
+//   try {
+//     const { id: assetID } = req.params;
+//     // const role = req.query.role || "user"; // Default to user
+
+//     const client = new ClientApplication();
+//     const result = await client.submitTxn(
+//       "org1",
+//       "user",
+//       "simplyfichannel",
+//       "SimplyFi-Task",
+//       "AssetTransfer",
+//       "queryUser",
+//       "ReadAsset",
+//       assetID
+//     );
+
+//     res.status(200).json({ success: true, data: JSON.parse(result) });
+//   } catch (error) {
+//     res.status(404).json({ success: false, error: error.message });
+//   }
+// });
 router.get("/assets/:id", async (req, res) => {
   try {
     const { id: assetID } = req.params;
-    // const role = req.query.role || "user"; // Default to user
+    const { userId } = req.query; // Get user ID from query parameter
+
+    if (!userId) {
+      throw new Error("User ID is required.");
+    }
 
     const client = new ClientApplication();
     const result = await client.submitTxn(
       "org1",
-      "user",
+      userId, // <-- Pass the user ID dynamically
       "simplyfichannel",
       "SimplyFi-Task",
       "AssetTransfer",
@@ -64,7 +90,13 @@ router.get("/assets/:id", async (req, res) => {
 
     res.status(200).json({ success: true, data: JSON.parse(result) });
   } catch (error) {
-    res.status(404).json({ success: false, error: error.message });
+    if (error.message.includes("Unauthorized")) {
+      res.status(403).json({ success: false, error: "Access denied." });
+    } else if (error.message.includes("does not exist")) {
+      res.status(404).json({ success: false, error: "Asset not found." });
+    } else {
+      res.status(500).json({ success: false, error: error.message });
+    }
   }
 });
 

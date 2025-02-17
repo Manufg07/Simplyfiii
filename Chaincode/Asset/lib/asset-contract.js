@@ -36,9 +36,43 @@ class AssetTransfer extends Contract {
 
   // ReadAsset returns the asset with the given ID
   async ReadAsset(ctx, assetID) {
-    // Validate input
     if (!assetID) {
       throw new Error("Asset ID is required.");
+    }
+
+    const assetJSON = await ctx.stub.getState(assetID);
+    if (!assetJSON || assetJSON.length === 0) {
+      throw new Error(`Asset ${assetID} does not exist.`);
+    }
+
+    const asset = JSON.parse(assetJSON.toString());
+    const clientID = ctx.clientIdentity;
+
+    // // 1. Allow Admins and Auditors to bypass ownership check
+    // const role = clientID.getAttributeValue("role"); // Get the 'role' attribute
+    // if (role === "admin" || role === "auditor") {
+    //   return assetJSON.toString();
+    // }
+
+    // 2. For Regular Users: Check if their 'id' attribute matches the asset's owner
+    const userId = clientID.getAttributeValue("id"); // Get the 'id' attribute
+    if (asset.owner !== userId) {
+      throw new Error("Unauthorized: You can only view your own assets.");
+    }
+
+    return assetJSON.toString();
+  }
+
+  async UpdateAsset(ctx, assetID, newValue, newOwner) {
+    // Validate input
+    if (!assetID || (!newValue && !newOwner)) {
+      throw new Error("Invalid input parameters.");
+    }
+
+    // Check if the caller has the "admin" role
+    const clientID = ctx.clientIdentity;
+    if (!clientID.assertAttributeValue("role", "admin")) {
+      throw new Error('Only users with the "admin" role can update assets.');
     }
 
     // Retrieve the asset from the ledger
@@ -47,54 +81,19 @@ class AssetTransfer extends Contract {
       throw new Error(`The asset ${assetID} does not exist.`);
     }
 
-    // Parse the asset
+    // Parse the asset and update its value and/or owner
     const asset = JSON.parse(assetJSON.toString());
-
-    // Check if the caller is the owner, an Auditor, or a Regular User
-    const clientID = ctx.clientIdentity;
-    const caller = clientID.getID(); // Get the caller's identity
-    if (
-      asset.owner !== caller &&
-      !clientID.assertAttributeValue("role", "auditor") &&
-      !clientID.assertAttributeValue("role", "user")
-    ) {
-      throw new Error("You are not authorized to view this asset.");
+    if (newValue) {
+      asset.value = parseInt(newValue); // Convert newValue to integer
+    }
+    if (newOwner) {
+      asset.owner = newOwner;
     }
 
-    return assetJSON.toString();
+    // Save the updated asset to the ledger
+    await ctx.stub.putState(assetID, Buffer.from(JSON.stringify(asset)));
+    return JSON.stringify(asset);
   }
-
-  async UpdateAsset(ctx, assetID, newValue, newOwner) {
-  // Validate input
-  if (!assetID || (!newValue && !newOwner)) {
-    throw new Error("Invalid input parameters.");
-  }
-
-  // Check if the caller has the "admin" role
-  const clientID = ctx.clientIdentity;
-  if (!clientID.assertAttributeValue("role", "admin")) {
-    throw new Error('Only users with the "admin" role can update assets.');
-  }
-
-  // Retrieve the asset from the ledger
-  const assetJSON = await ctx.stub.getState(assetID);
-  if (!assetJSON || assetJSON.length === 0) {
-    throw new Error(`The asset ${assetID} does not exist.`);
-  }
-
-  // Parse the asset and update its value and/or owner
-  const asset = JSON.parse(assetJSON.toString());
-  if (newValue) {
-    asset.value = parseInt(newValue); // Convert newValue to integer
-  }
-  if (newOwner) {
-    asset.owner = newOwner;
-  }
-
-  // Save the updated asset to the ledger
-  await ctx.stub.putState(assetID, Buffer.from(JSON.stringify(asset)));
-  return JSON.stringify(asset);
-}
 
   // DeleteAsset deletes the asset with the given ID
   async DeleteAsset(ctx, assetID) {
@@ -118,14 +117,16 @@ class AssetTransfer extends Contract {
     // Delete the asset from the ledger
     await ctx.stub.deleteState(assetID);
     return JSON.stringify({ message: `Asset ${assetID} deleted successfully` }); // Return JSON
-}
+  }
 
   // GetAllAssets returns all assets in the ledger (only for Auditors)
   async GetAllAssets(ctx) {
     // Check if the caller has the "Auditor" role
     const clientID = ctx.clientIdentity;
     if (!clientID.assertAttributeValue("role", "auditor")) {
-      throw new Error('Only users with the "Auditor" role can view all assets.');
+      throw new Error(
+        'Only users with the "Auditor" role can view all assets.'
+      );
     }
 
     // Use a range query to retrieve all assets
