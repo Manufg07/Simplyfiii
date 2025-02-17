@@ -58,14 +58,15 @@ cd Simplyfiii
 ### **3️⃣ Set Up Hyperledger Fabric Network**
 ```bash
 cd SimplyFi
+chmod +x startSimplyfiNetwork1.sh
 ./startSimplyfiNetwork1.sh
 ```
 
 ### **4️⃣ Configure Client**
 ```bash
-cd ../server
+cd /server
 npm install
-cd ../routes
+cd /routes
 node setupWallet.js
 ```
 ### **5️⃣ Start the REST API Server**
@@ -87,9 +88,11 @@ node npm run dev
 ```bash
 ```
 # Check running Docker containers
+```bash
 docker ps -a
 ```
 # Restart the Hyperledger Fabric network
+```bash
 ./stopSimplyfiNetwork.sh && ./startSimplyfiNetwork1.sh
 ```
 
@@ -97,6 +100,7 @@ docker ps -a
 ```bash
 ```
 # Reimport user identities
+
 cd server
 cd routes
 node setupWallet.js
