@@ -27,6 +27,12 @@ async function setupWallet() {
         msp: "Org1MSP",
       },
       {
+        name: "org1_manu",
+        user: "Manu@org1.simplyfi.com",
+        org: "org1.simplyfi.com",
+        msp: "Org1MSP",
+      },
+      {
         name: "org2_admin",
         user: "Admin@org2.simplyfi.com",
         org: "org2.simplyfi.com",

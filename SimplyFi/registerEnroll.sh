@@ -64,6 +64,11 @@ function createOrg1() {
   fabric-ca-client register --caname ca-org1 --id.name user1  --id.secret user1pw --id.type client --id.attrs 'role=user:ecert,id=user1:ecert' --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
   { set +x; } 2>/dev/null
 
+  echo "Registering user manu"
+  set -x
+  fabric-ca-client register --caname ca-org1 --id.name manu  --id.secret manupw --id.type client --id.attrs 'role=user:ecert,id=manu:ecert' --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
+  { set +x; } 2>/dev/null
+
   echo "Generating the peer0 msp"
   set -x
   fabric-ca-client enroll -u https://peer0:peer0pw@localhost:7054 --caname ca-org1 -M "${PWD}/organizations/peerOrganizations/org1.simplyfi.com/peers/peer0.org1.simplyfi.com/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
@@ -119,6 +124,14 @@ function createOrg1() {
   { set +x; } 2>/dev/null
 
   cp "${PWD}/organizations/peerOrganizations/org1.simplyfi.com/msp/config.yaml" "${PWD}/organizations/peerOrganizations/org1.simplyfi.com/users/User1@org1.simplyfi.com/msp/config.yaml"
+
+  echo "Generating the user manu msp"
+  set -x
+  fabric-ca-client enroll -u https://manu:manupw@localhost:7054 --caname ca-org1 -M "${PWD}/organizations/peerOrganizations/org1.simplyfi.com/users/Manu@org1.simplyfi.com/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/org1/ca-cert.pem"
+  { set +x; } 2>/dev/null
+
+  cp "${PWD}/organizations/peerOrganizations/org1.simplyfi.com/msp/config.yaml" "${PWD}/organizations/peerOrganizations/org1.simplyfi.com/users/Manu@org1.simplyfi.com/msp/config.yaml"
+
 
 }
 

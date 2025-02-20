@@ -55,7 +55,7 @@ class AssetTransfer extends Contract {
     // }
 
     // 2. For Regular Users: Check if their 'id' attribute matches the asset's owner
-    const userId = clientID.getAttributeValue("id"); // Get the 'id' attribute
+    const userId = clientID.getAttributeValue("id"); 
     if (asset.owner !== userId) {
       throw new Error("Unauthorized: You can only view your own assets.");
     }

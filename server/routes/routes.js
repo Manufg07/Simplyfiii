@@ -79,7 +79,7 @@ router.get("/assets/:id", async (req, res) => {
     const client = new ClientApplication();
     const result = await client.submitTxn(
       "org1",
-      userId, // <-- Pass the user ID dynamically
+      userId,
       "simplyfichannel",
       "SimplyFi-Task",
       "AssetTransfer",
